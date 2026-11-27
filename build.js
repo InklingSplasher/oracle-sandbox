@@ -1,0 +1,14 @@
+const fs=require('fs');
+require('./build_engine.js');
+let eng=fs.readFileSync('engine.js','utf8');
+if(/<\/script/i.test(eng)) throw new Error('engine contains </script');
+let html=fs.readFileSync('ui/index.html','utf8');
+const rep=(k,v)=>{ if(!html.includes(k)) throw new Error('missing '+k); html=html.split(k).join(v); };
+rep('/*CSS*/', fs.readFileSync('ui/style.css','utf8') + fs.readFileSync('ui/player.css','utf8'));
+rep('/*ENGINE*/', eng);
+rep('/*CONTENT*/', fs.readFileSync('ui/content.js','utf8'));
+rep('/*FORMAT*/', fs.readFileSync('ui/format.js','utf8'));
+rep('/*APP*/', fs.readFileSync('ui/app.js','utf8').replace('/*PLAYER*/', fs.readFileSync('ui/player.js','utf8')).replace('/*DBMGR*/', fs.readFileSync('ui/dbmgr.js','utf8')).replace('/*REMOTE*/', fs.readFileSync('ui/remote.js','utf8')));
+fs.mkdirSync('dist',{recursive:true});
+fs.writeFileSync('dist/index.html', html);
+console.log('built', (html.length/1024).toFixed(0)+' KB');

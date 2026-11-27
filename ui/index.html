@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de" data-skin="graphit">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Oracle-Sandbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/*CSS*/
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="bar">
+    <button class="btn icon ghost only-narrow" id="sideBtn" aria-label="Objekt-Browser öffnen"><svg class="i" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v6c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-6M5 11.5v6c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-6"/></svg></button>
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><ellipse cx="13" cy="6" rx="9" ry="3.2" style="fill:var(--acc)"/><path d="M4 6v6.5c0 1.8 4 3.2 9 3.2s9-1.4 9-3.2V6c0 1.8-4 3.2-9 3.2S4 7.8 4 6z" style="fill:var(--logo2)"/><path d="M4 13.5V20c0 1.8 4 3.2 9 3.2s9-1.4 9-3.2v-6.5c0 1.8-4 3.2-9 3.2s-9-1.4-9-3.2z" style="fill:var(--logo3)"/></svg>
+      <b>Oracle-Sandbox</b><small>SQL &amp; PL/SQL im Browser</small>
+    </div>
+    <button class="btn primary" id="runStmt" title="Anweisung unter dem Cursor ausführen (Strg+Enter)"><svg class="i" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z" fill="currentColor"/></svg><span class="lbl">Anweisung</span><kbd>Strg ↵</kbd></button>
+    <button class="btn" id="runAll" title="Ganzes Skript ausführen (F5)"><svg class="i" viewBox="0 0 24 24"><path d="M5 5l8 7-8 7zM13 5l8 7-8 7z"/></svg><span class="lbl">Skript</span><kbd>F5</kbd></button>
+    <button class="btn" id="stepBtn" title="Schrittweise ausführen und animiert durchlaufen (F8)"><svg class="i" viewBox="0 0 24 24"><path d="M4 12h9M10 8l4 4-4 4"/><circle cx="18.5" cy="12" r="2.2"/></svg><span class="lbl">Schritte</span><kbd>F8</kbd></button>
+    <button class="btn stop" id="stopBtn" hidden><svg class="i" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>Stopp</button>
+    <div class="tx" id="txBadge" hidden title="Es gibt Änderungen, die noch nicht mit COMMIT bestätigt wurden"><span class="dot"></span><span id="txText">Offene Transaktion</span><button id="txCommit">COMMIT</button><button id="txRollback">ROLLBACK</button></div>
+    <div class="spacer"></div>
+    <button class="btn ghost" id="fmtBtn" title="Formatieren (Strg+Shift+F) – Markierung oder ganzes Blatt"><svg class="i" viewBox="0 0 24 24"><path d="M4 6h16M8 10h12M8 14h12M4 18h16"/></svg><span class="lbl">Formatieren</span></button>
+    <button class="btn ghost" id="exBtn"><svg class="i" viewBox="0 0 24 24"><path d="M4 5h7v14H4zM13 5h7v6h-7zM13 13h7v6h-7z"/></svg><span class="lbl">Beispiele</span></button>
+    <button class="btn ghost" id="cheatBtn" aria-pressed="false"><svg class="i" viewBox="0 0 24 24"><path d="M5 4h10l4 4v12H5z"/><path d="M15 4v4h4M8 12h8M8 16h6"/></svg><span class="lbl">Spickzettel</span></button>
+    <button class="btn icon ghost" id="skinBtn" aria-label="Farbschema wählen" title="Farbschema"><svg class="i" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.6-.8 1.6-1.6 0-.9-.7-1.3-.7-2.2 0-1 .8-1.7 1.8-1.7H17a4 4 0 0 0 4-4C21 6.7 17 3 12 3z"/><circle cx="7.5" cy="11" r="1.2" fill="currentColor"/><circle cx="10.5" cy="7.2" r="1.2" fill="currentColor"/><circle cx="15" cy="7.5" r="1.2" fill="currentColor"/></svg></button>
+    <button class="btn icon ghost" id="menuBtn" aria-label="Menü"><svg class="i" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="19" cy="12" r="1.3" fill="currentColor"/></svg></button>
+  </header>
+  <main class="work" id="work">
+    <aside id="side" aria-label="Objekt-Browser">
+      <div class="panelhead"><button class="dbsw" id="dbBtn" title="Datenbank wechseln, anlegen oder importieren"><svg class="i" viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7" ry="2.6"/><path d="M5 6v12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6V6M5 12c0 1.4 3.1 2.6 7 2.6s7-1.2 7-2.6"/></svg><span class="dbn"><b id="dbName">Übung</b><small>Schema STUDENT</small></span><svg class="i chev" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button><button class="btn icon ghost only-narrow" id="sideClose" aria-label="Schließen"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <input class="search" id="objSearch" type="search" placeholder="Objekte filtern" aria-label="Objekte filtern">
+      <div class="scrollY" id="objTree"></div>
+      <div class="sidefoot" id="sideFoot">Alles wird lokal in deinem Browser gespeichert. Für eine Sicherung: Menü → Als SQL exportieren.</div>
+    </aside>
+    <section class="center">
+      <div class="tabs" id="sheetTabs" role="tablist"></div>
+      <div class="ed" id="ed">
+        <div class="gut"><div class="gutin" id="gutIn"></div><div id="hitIn"></div></div>
+        <div class="codewrap">
+          <div class="layer" id="marks"><div id="marksIn"></div></div>
+          <div class="layer" id="fxL"><div id="fxIn"></div></div>
+          <pre class="layer" id="hl" aria-hidden="true"><div id="hlIn"></div></pre>
+          <div class="layer" id="sqL"><div id="sqIn"></div></div>
+          <textarea id="ta" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off" aria-label="SQL-Editor"></textarea>
+        </div>
+        <div id="watch" hidden></div><div id="hud" hidden></div>
+        <button class="lintpill" id="lintPill" hidden><span class="lp-d"></span><span id="lintText"></span></button>
+      </div>
+      <div class="split" id="split" role="separator" aria-orientation="horizontal" aria-label="Höhe von Editor und Ergebnis ändern"></div>
+      <div class="out">
+        <div class="outbar">
+          <button class="otab act" id="tabOut">Skriptausgabe</button>
+          <button class="otab" id="tabObj" hidden>Objekt</button>
+          <span class="summary" id="summary"></span>
+        </div>
+        <div id="outBody"></div>
+      </div>
+    </section>
+    <aside id="cheat" aria-label="Spickzettel">
+      <div class="panelhead"><h2>Spickzettel</h2><button class="btn icon ghost" id="cheatClose" aria-label="Spickzettel schließen"><svg class="i" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+      <input class="search" id="cheatSearch" type="search" placeholder="Suchen, z. B. cursor, trigger, join" aria-label="Spickzettel durchsuchen">
+      <div class="scrollY" id="cheatBody"></div>
+    </aside>
+    <div class="scrim s" id="scrimS"></div>
+    <div class="scrim c" id="scrimC"></div>
+  </main>
+</div>
+<div class="pop" id="pop" hidden></div>
+<div class="modal" id="modal" hidden><div class="dlg" id="dlg" role="dialog" aria-modal="true"></div></div>
+<div class="toast" id="toast" hidden></div>
+<div id="fx"></div><div class="dropzone" id="dropzone" hidden>SQL-Dateien hier ablegen zum Importieren</div>
+<input type="file" id="importIn" accept=".sql,.txt,.pls,.pkb,.pks,text/plain" multiple hidden>
+<input type="file" id="fileIn" accept=".sql,.txt,.pls,.pkb,.pks,text/plain" hidden>
+<script type="text/plain" id="engine-src">/*ENGINE*/</script>
+<script>
+/*CONTENT*/
+</script>
+<script>
+/*FORMAT*/
+/*APP*/
+</script>
+</body>
+</html>

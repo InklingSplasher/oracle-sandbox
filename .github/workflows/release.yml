@@ -1,0 +1,29 @@
+name: Release mit fertiger HTML-Datei
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm test
+      - name: Paket schnüren
+        run: |
+          mkdir -p paket/oracle-sandbox/bruecke
+          cp dist/index.html paket/oracle-sandbox/oracle-sandbox.html
+          cp bruecke/* paket/oracle-sandbox/bruecke/
+          cp README.md LICENSE paket/oracle-sandbox/
+          cd paket && zip -qr ../oracle-sandbox-${GITHUB_REF_NAME}.zip oracle-sandbox
+      - name: Release anlegen
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "$GITHUB_REF_NAME" dist/index.html#oracle-sandbox.html "oracle-sandbox-${GITHUB_REF_NAME}.zip" --title "$GITHUB_REF_NAME" --generate-notes

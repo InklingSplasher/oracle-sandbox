@@ -1,0 +1,86 @@
+/* ===== Schrittmodus / Animationen ===== */
+.ed.playing .gutin,.ed.heat .gutin{padding-left:40px}
+#hitIn{position:absolute;left:0;top:10px;width:40px;pointer-events:none;will-change:transform}
+.hit{position:absolute;left:5px;height:15px;margin-top:calc((var(--lh) - 15px)/2);min-width:20px;padding:0 5px;border-radius:8px;background:var(--acc);color:var(--onAcc);font:700 10px/15px var(--mono);text-align:center;box-shadow:0 0 10px color-mix(in srgb,var(--acc) 55%,transparent)}
+.hit.cold{background:color-mix(in srgb,var(--acc) 30%,var(--panel2));color:var(--ink);box-shadow:none}
+.curbar{position:absolute;left:-14px;width:100000px;height:var(--lh);background:linear-gradient(90deg,color-mix(in srgb,var(--acc) 34%,transparent),color-mix(in srgb,var(--acc) 12%,transparent) 30%,transparent 75%);box-shadow:inset 3px 0 0 var(--acc),0 0 26px color-mix(in srgb,var(--acc) 30%,transparent);transition:top var(--mv,140ms) cubic-bezier(.2,.9,.25,1),opacity .4s}
+.curbar.err{background:linear-gradient(90deg,color-mix(in srgb,var(--err) 40%,transparent),transparent 70%);box-shadow:inset 3px 0 0 var(--err),0 0 26px color-mix(in srgb,var(--err) 40%,transparent)}
+.curbar.off{opacity:0}
+.glow{position:absolute;left:-14px;width:100000px;height:var(--lh);background:color-mix(in srgb,var(--acc) 26%,transparent);animation:glow 1.1s ease-out forwards}
+@keyframes glow{from{opacity:1}to{opacity:0}}
+.sweep{position:absolute;left:-14px;width:100000px;overflow:hidden;pointer-events:none}
+.sweep::after{content:'';position:absolute;left:0;right:0;top:-60%;height:60%;background:linear-gradient(180deg,transparent,color-mix(in srgb,var(--acc) 22%,transparent),transparent);animation:sweep var(--sw,.7s) cubic-bezier(.4,0,.2,1) forwards}
+@keyframes sweep{to{top:100%}}
+.chip{position:absolute;height:22px;padding:0 9px;border-radius:11px;font:600 12px/22px var(--mono);white-space:nowrap;background:var(--acc);color:var(--onAcc);box-shadow:0 6px 20px color-mix(in srgb,var(--acc) 40%,transparent);animation:chipup 1.5s cubic-bezier(.2,.8,.2,1) forwards}
+.chip.ret{background:var(--panel2);color:var(--acc);border:1px solid var(--acc)}
+@keyframes chipup{0%{transform:translateY(6px) scale(.6);opacity:0}15%{transform:translateY(0) scale(1.08);opacity:1}25%{transform:scale(1)}80%{opacity:1}100%{transform:translateY(-26px);opacity:0}}
+
+#watch{position:absolute;top:10px;right:14px;z-index:4;width:min(290px,45%);max-height:calc(100% - 60px);overflow:auto;border-radius:12px;background:color-mix(in srgb,var(--panel2) 92%,transparent);border:1px solid var(--line2);box-shadow:0 18px 40px rgba(0,0,0,.35);backdrop-filter:blur(6px);padding:8px 0 6px;pointer-events:none;animation:popin .35s cubic-bezier(.2,.9,.3,1.3)}
+#watch[hidden]{display:none}
+#watch h5{margin:0 12px 6px;font:600 11.5px Inter,sans-serif;color:var(--dusk);display:flex;justify-content:space-between}
+.wv{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:10px;padding:3px 12px;font:12.5px/1.4 var(--mono);align-items:baseline}
+.wv b{color:var(--mut);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wv span{color:var(--ink);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wv.chg{animation:wflash .6s ease-out}
+@keyframes wflash{0%{background:color-mix(in srgb,var(--acc) 45%,transparent)}100%{background:transparent}}
+.wv.chg span{animation:wnum .45s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes wnum{0%{transform:translateY(-8px);opacity:.2;color:var(--acc)}100%{transform:none;opacity:1}}
+@keyframes popin{from{transform:scale(.85) translateY(-8px);opacity:0}to{transform:none;opacity:1}}
+
+#hud{position:absolute;left:58px;bottom:10px;z-index:5;display:flex;align-items:center;gap:6px;flex-wrap:wrap;max-width:calc(100% - 80px);padding:6px;border-radius:14px;background:color-mix(in srgb,var(--panel2) 94%,transparent);border:1px solid var(--line2);box-shadow:0 18px 44px rgba(0,0,0,.4);backdrop-filter:blur(6px);animation:popin .3s cubic-bezier(.2,.9,.3,1.3)}
+#hud[hidden]{display:none}
+#hud.fade{transition:opacity .6s,transform .6s;opacity:0;transform:translateY(10px)}
+.hb{height:32px;min-width:32px;padding:0 9px;border-radius:9px;border:1px solid var(--line2);background:var(--panel);display:inline-flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;color:var(--ink)}
+.hb:hover{background:var(--raise)}
+.hb.main{background:var(--acc);border-color:var(--acc);color:var(--onAcc)}
+.seg{display:flex;border:1px solid var(--line2);border-radius:9px;overflow:hidden}
+.seg button{height:30px;padding:0 9px;border:0;background:transparent;color:var(--mut);font-size:12px;white-space:nowrap}
+.seg button.on{background:var(--acc);color:var(--onAcc);font-weight:600}
+.hudinfo{display:flex;flex-direction:column;gap:4px;min-width:120px;padding:0 6px}
+.hudinfo .t{font:600 12px var(--mono);color:var(--ink);white-space:nowrap}
+.hudinfo .t em{font-style:normal;color:var(--acc)}
+.prog{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.prog i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--acc),var(--num));box-shadow:0 0 10px var(--acc);transition:width .12s linear}
+.combo{font:800 18px/1 'Inter Tight',sans-serif;color:var(--acc);text-shadow:0 0 18px color-mix(in srgb,var(--acc) 70%,transparent);padding:0 6px;white-space:nowrap}
+.combo.bump{animation:combo .35s cubic-bezier(.2,.9,.3,1.6)}
+@keyframes combo{0%{transform:scale(1.7)}100%{transform:scale(1)}}
+.combo[hidden]{display:none}
+
+#fx{position:fixed;inset:0;pointer-events:none;z-index:90;overflow:hidden}
+.pt{position:absolute;left:0;top:0;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:var(--acc);box-shadow:0 0 12px var(--acc),0 0 24px color-mix(in srgb,var(--acc) 60%,transparent)}
+.pt.lbl{width:auto;height:22px;margin:-11px 0 0 -16px;padding:0 8px;border-radius:11px;font:700 12px/22px var(--mono);color:var(--onAcc)}
+.pt.del{background:var(--err);box-shadow:0 0 12px var(--err)}
+.pt.upd{background:var(--num);box-shadow:0 0 12px var(--num)}
+.obj.ping{animation:ping .6s ease-out}
+@keyframes ping{0%{background:color-mix(in srgb,var(--acc) 45%,transparent);box-shadow:inset 3px 0 0 var(--acc)}100%{background:transparent}}
+.obj.ping .meta{color:var(--acc)}
+.ed.shake{animation:shake .45s cubic-bezier(.36,.07,.19,.97)}
+@keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-7px)}40%,60%{transform:translateX(7px)}}
+.ed.win{animation:win 1.1s ease-out}
+@keyframes win{0%{box-shadow:inset 0 0 0 2px var(--acc),inset 0 0 60px color-mix(in srgb,var(--acc) 30%,transparent)}100%{box-shadow:inset 0 0 0 0 transparent}}
+.res.live{animation:resin .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes resin{from{transform:translateX(-14px);opacity:0}to{transform:none;opacity:1}}
+.res.live>header code::after{content:'';display:inline-block;width:8px;height:8px;margin-left:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc);animation:blink .7s infinite alternate}
+@keyframes blink{to{opacity:.2}}
+.res.reveal .grid tr{animation:rowin .4s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes rowin{from{transform:translateY(8px);opacity:0}to{transform:none;opacity:1}}
+.res.reveal .msg svg path{stroke-dasharray:24;stroke-dashoffset:24;animation:draw .5s .1s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.res.reveal.bad{animation:shake .45s}
+.typed{display:block;animation:typein var(--ty,.35s) steps(28,end) both}
+@keyframes typein{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.trunc{font-size:12px;color:var(--warn);padding:0 6px;white-space:nowrap}
+@media (max-width:640px){#watch{width:min(230px,60%);font-size:12px}#hud{left:8px;max-width:calc(100% - 16px)}.seg button{padding:0 7px}}
+@media (prefers-reduced-motion:reduce){.chip,.glow,.sweep::after,.res.live,.res.reveal .grid tr,.typed,#watch,#hud{animation:none!important}.curbar{transition:none}}
+
+.ed.playing .gutin .err::before,.ed.heat .gutin .err::before,.ed.playing .gutin .warn::before,.ed.heat .gutin .warn::before{left:30px}
+@media (max-width:1480px){.bar .btn.ghost .lbl{display:none}#fmtBtn,#exBtn,#cheatBtn{width:36px;padding:0;justify-content:center}.brand small{display:none}}
+@media (max-width:1180px){#runAll kbd,#stepBtn kbd{display:none}}
+.okmark{position:relative;display:inline-grid;place-items:center;width:18px;height:18px;margin-right:7px;vertical-align:-4px;color:var(--acc);animation:okpop .45s cubic-bezier(.2,.9,.3,1.5) both}
+.okmark svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.okmark circle{stroke-dasharray:52;stroke-dashoffset:52;animation:okdraw .4s ease-out .05s forwards;opacity:.55}
+.okmark path{stroke-dasharray:14;stroke-dashoffset:14;animation:okdraw .25s ease-out .3s forwards}
+.okmark::after{content:'';position:absolute;inset:-2px;border-radius:50%;border:2px solid var(--acc);opacity:0;animation:okring .7s ease-out .3s}
+@keyframes okpop{0%{transform:scale(.3);opacity:0}100%{transform:scale(1);opacity:1}}
+@keyframes okdraw{to{stroke-dashoffset:0}}
+@keyframes okring{0%{transform:scale(.8);opacity:.8}100%{transform:scale(2.2);opacity:0}}
